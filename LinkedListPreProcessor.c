@@ -15,84 +15,61 @@
 /*
  * Definitions
  */
-#define MAX_PROMPT_SIZE 30 // maximum length of the prompt
-#define MAX_COMMAND_LENGTH 30 // maximum length of the command
+#define MAX_LENGTH_WORD 20
+#define ENGLISH
+#define KASHMIRI
+
 /*
- * Array for prompt
+ * Global structures
  */
-char *prompt;
-char *input;
-char *cmd;
-char *args;
+typedef struct NODE {
+	//	char word[MAX_LENGTH_WORD];
+	char *word;
+	struct NODE *next;
+} node;
 
 int main () {
+	// define a node
+	node *linked_list = malloc(sizeof(node));
+	linked_list->next = malloc(sizeof(node));
+	linked_list->word = malloc(MAX_LENGTH_WORD);
 
-	// Allocating memory
-	prompt = malloc(MAX_PROMPT_SIZE);
-	input = malloc(MAX_COMMAND_LENGTH);
-	cmd = malloc(MAX_COMMAND_LENGTH);
-	args = malloc(MAX_COMMAND_LENGTH);
+	node *head_node = malloc(sizeof(node));
+	head_node->next = malloc(sizeof(node));
+	head_node->word = malloc(MAX_LENGTH_WORD);
 
-	// The commands to match against
-	char set[] = "set";
-	char pr[] = "prompt";
-	char quit[] = "quit\n"; // newline at the end because the user will pass in
-	// a carriage return after typing the command. This
-	// is not true for set, where we would have arguments
-	// afterwards.
+	head_node->next = linked_list;
 
-	// The default prompt is set to be "Shell!!"
-	strcpy(prompt, "Shell!!");
+	char exit[] = "***END***";
+	printf("Welcome to the infinite string storage program.\n");
+	printf("Please input a single word: \n");
+	char *input;
+	input = malloc(MAX_LENGTH_WORD);
+	fgets(input, MAX_LENGTH_WORD, stdin);
+	linked_list->word = strtok(input, " ");
+	printf("word is: %s\n", linked_list->word);
+	linked_list->word[strlen(linked_list->word)-1]='\0';
+	//	linked_list->next = realloc(linked_list->next, sizeof(node));
+	//	linked_list->word = realloc(linked_list->word, MAX_LENGTH_WORD);
+	//	linked_list = realloc(linked_list, sizeof(node));
+	printf("reached here\n");
+	while (strcmp(linked_list->word, exit) != 0) {
+		linked_list = linked_list->next;
 
-	// The main loop
-	while (1) {
-		// Display prompt
-		printf("%s ",prompt);
+		linked_list = malloc(sizeof(node));
+		linked_list->next = malloc(sizeof(node));
+		linked_list->word = malloc(MAX_LENGTH_WORD);
 
-		// Get user command
-		fgets(input, MAX_COMMAND_LENGTH, stdin);
-
-		// tokenize the input string
-		char *cmd = strtok(input, " "); // Get the first word of the input
-		int i;
-		// sanitize the command to be lowercase, so that we can handle
-		// case insensitivity
-		for (i = 0; i != '\0'; i++) {
-			cmd[i] = tolower(cmd[i]);
-		}
-		// if the command is quit, exit
-		if (strcmp(cmd, quit) == 0) {
-			break;
-		}
-		else {
-			if (strcmp(cmd, set) != 0) {
-				system(input);
-			}
-			else {
-				// if the command is set, then check the second word. If it's
-				// prompt (case insensitive), then set the prompt to be the third
-				// word. Else, execute the command
-				char *args1;
-				char *args2;
-				args1 = strtok(NULL, " ");
-				// temp array to check if second word is prompt
-				char *checkargs1 = strdup(args1);
-				// sanitize it to lowercase
-				for (i = 0; i != '\0'; i++) {
-					checkargs1[i] = tolower(checkargs1[i]);
-				}
-				// If not prompt, then execute the command
-				if (strcmp(checkargs1, pr) != 0) {
-					system(input);
-				}
-				// set the prompt
-				else {
-					args2 = strtok(NULL, " ");
-					strcpy(prompt, args2);
-					prompt[strlen(prompt)-1]='\0';
-				}
-			}
-		}
+		printf("Please input a single word: \n");
+		input = realloc(input, MAX_LENGTH_WORD);
+		fgets(input, MAX_LENGTH_WORD, stdin);
+		linked_list->word = strtok(input, " ");
+		printf("word is: %s\n", linked_list->word);
+		linked_list->word[strlen(linked_list->word)-1]='\0';
+		//		linked_list = linked_list->next;
 	}
+
+	// Now, print out all the words
+
 	return EXIT_SUCCESS;
 }
