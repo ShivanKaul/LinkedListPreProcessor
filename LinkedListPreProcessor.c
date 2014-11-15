@@ -16,166 +16,113 @@
  * Definitions
  */
 #define MAX_LENGTH_WORD 20
+// Support for multiple languages
 #define ENGLISH
-#define KASHMIRI
+//#define FRENCH
 
 /*
  * Global structures
  */
 typedef struct NODE {
-	//	char word[MAX_LENGTH_WORD];
 	char *word;
 	struct NODE *next;
 } node;
 
+// The head node into the linked list
 node *head_node;
 
+/* Helper function to add a node to the linked list.
+ * Iterates through the list until it sees a null, creates a new node, then sets its data
+ * to the word provided.
+ */
 void add_node(char *word) {
 	node *curnode = (node *)malloc(sizeof(node));
 	curnode->word = NULL;
 	curnode = head_node;
-	printf("curnode should be null: %s\n", curnode->word);
+
 	while(curnode->next != NULL) {
-		//		x->next->prev = x;
 		curnode = curnode->next;
-		printf("curnode should be h1: %s\n", curnode->word);
-		printf("headnode points to node that should have value h1: %s\n", head_node->next->word);
 	}
+	// found spot to add new node
 	node *new_node = (node *)malloc(sizeof(node));
 	new_node->word = (char *)malloc(sizeof(MAX_LENGTH_WORD));
-	strcpy(new_node->word, word);
+	strcpy(new_node->word, word); // assign data
 	new_node->next = NULL;
-	curnode->next = new_node;
-
-	//	while (x->prev != NULL) {
-	//		x = x->prev;
-	//	}
+	curnode->next = new_node; // set
 }
 
-
 int main () {
+	// string to end with
 	char exit[] = "***END***";
 
-	// define a node
+	// define the linked list
 	node *linked_list = (node *)malloc(sizeof(node));
 	linked_list->word = (char *)malloc(sizeof(MAX_LENGTH_WORD));
 	linked_list->next = NULL;
 
+	// define the headnode of the linked list
 	head_node = (node *)malloc(sizeof(node));
 	head_node->word = (char *)malloc(sizeof(MAX_LENGTH_WORD));
 	head_node->next = NULL;
 
-
+	// get the first datum
+#ifdef ENGLISH
 	printf("Welcome to the infinite string storage program.\n");
 	printf("Please input a single word: \n");
+#else
+	printf("Bienvenue dans le programme de stockage de chaîne infinie.\n");
+	printf("Veuillez saisir un seul mot: \n");
+#endif
 	char *input;
 	input = malloc(MAX_LENGTH_WORD);
 	fgets(input, MAX_LENGTH_WORD, stdin);
-	//	char data[MAX_LENGTH_WORD] = strtok(input, " ");
+	// get only the first word of the string that the user enters
 	char *data = strtok(input, " ");
-	printf("data: %s\n", data);
+	// remove carriage returns
+	if (data[strlen(data)-1]=='\n') {
+		data[strlen(data)-1]='\0';
+	}
+	// set the data of the first node in our linked list
 	strcpy(linked_list->word, data);
-	printf("word is: %s\n", linked_list->word);
-	linked_list->word[strlen(linked_list->word)-1]='\0';
 
+	// set the headnode to point to the first node of the linked list
 	head_node->next = linked_list;
-	printf("first time, headnode points to node that has value: %s\n", head_node->next->word);
 
-
+	// get the second word
+#ifdef ENGLISH
 	printf("Please input a single word: \n");
-	//	input = malloc(MAX_LENGTH_WORD);
+#else
+	printf("Veuillez saisir un seul mot: \n");
+#endif
 	fgets(input, MAX_LENGTH_WORD, stdin);
-	//	char data[MAX_LENGTH_WORD] = strtok(input, " ");
+	// again, get the first word of the string and remove carriage return
 	data = strtok(input, " ");
-	data[strlen(data)-1]='\0';
-	printf("word is: %s\n", data);
+	if (data[strlen(data)-1]=='\n') {
+		data[strlen(data)-1]='\0';
+	}
 	while(strcmp(data, exit) != 0) {
+		// add a new node to the linked list and add the data to it
 		add_node(data);
-		printf("headnode: %s\n", head_node->word);
+
+		// get the next word
+#ifdef ENGLISH
 		printf("Please input a single word: \n");
+#else
+		printf("Veuillez saisir un seul mot: \n");
+#endif
 		fgets(input, MAX_LENGTH_WORD, stdin);
 		data = strtok(input, " ");
-		data[strlen(data)-1]='\0';
-		printf("word is: %s\n", data);
+		if (data[strlen(data)-1]=='\n') {
+			data[strlen(data)-1]='\0';
+		}
 	}
 
 	// Print everything
 	while (head_node->next != NULL) {
-		printf("%s\n", head_node->next->word);
+		printf("%s ", head_node->next->word);
 		head_node = head_node->next;
 	}
-
-	//	linked_list->next = malloc(sizeof(node));
-	//	linked_list->word = malloc(MAX_LENGTH_WORD);
-
-	//	node *head_node = (node *)malloc(sizeof(node));
-	//	head_node->next = malloc(sizeof(node));
-	//	head_node->word = malloc(MAX_LENGTH_WORD);
-
-	//	node *cur_node = (node *) malloc(sizeof(node));
-	//	cur_node->next = malloc(sizeof(node));
-	//	cur_node->word = malloc(MAX_LENGTH_WORD);
-
-	/*
-	 * Node headnode
-	 * Node curnode
-	 * Node nextnode
-	 *
-	 * headnode.next = curnode
-	 * curnode.data = blah
-	 * curnode.next = newnode
-	 * curnode = newnode
-	 */
-
-
-	//	head_node->next = linked_list;
-	//	head_node->word = "head node";
-
-	//	char exit[] = "***END***";
-	//	printf("Welcome to the infinite string storage program.\n");
-	//	printf("Please input a single word: \n");
-	//	char *input;
-	//	input = malloc(MAX_LENGTH_WORD);
-	//	fgets(input, MAX_LENGTH_WORD, stdin);
-	//	//	char data[MAX_LENGTH_WORD] = strtok(input, " ");
-	//	linked_list->word = strtok(input, " ");
-	//	printf("word is: %s\n", linked_list->word);
-	//	linked_list->word[strlen(linked_list->word)-1]='\0';
-	//	head_node = linked_list;
-	//	//	linked_list->next = cur_node;
-	//	cur_node = linked_list;
-	//	//	linked_list = cur_node->next;
-	//	//	linked_list->next = realloc(linked_list->next, sizeof(node));
-	//	//	linked_list->word = realloc(linked_list->word, MAX_LENGTH_WORD);
-	//	//	linked_list = realloc(linked_list, sizeof(node));
-	//	printf("reached here\n");
-	//	while (strcmp(linked_list->word, exit) != 0) {
-	//		//		linked_list = linked_list->next;
-	//		//
-	//		//		linked_list = (node *)malloc(sizeof(node));
-	//		printf("head node has contents: %s\n", head_node->word);
-	//		printf("cur node has contents: %s\n", cur_node->word);
-	//		printf("linked list has contents: %s\n", linked_list->word);
-	//
-	//		printf("Please input a single word: \n");
-	//		//		input = realloc(input, MAX_LENGTH_WORD);
-	//		fgets(input, MAX_LENGTH_WORD, stdin);
-	//		linked_list->word = strtok(input, " ");
-	//		printf("word is: %s\n", linked_list->word);
-	//		linked_list->word[strlen(linked_list->word)-1]='\0';
-	//		cur_node->next = linked_list;
-	//		cur_node = linked_list;
-	//		//		cur_node = linked_list;
-	//		//		linked_list = linked_list->next;
-	//	}
-	//	//	head_node = cur_node;
-	//	printf("head node has contents: %s\n", head_node->word);
-
-	// Now, print out all the words
-	//	while (strcmp(head_node->word, exit) != 0) {
-	//		printf("%s\n", head_node->word);
-	//		head_node = head_node->next;
-	//	}
-
+	// print new line at the end
+	printf("\n");
 	return EXIT_SUCCESS;
 }
