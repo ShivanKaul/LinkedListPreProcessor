@@ -3,7 +3,6 @@
  Name        : LinkedListPreProcessor.c
  Author      : Shivan Kaul Sahib
  Version     : 1.0
- Description : Q3 on assignment 3 for COMP 206
  ============================================================================
  */
 /*
